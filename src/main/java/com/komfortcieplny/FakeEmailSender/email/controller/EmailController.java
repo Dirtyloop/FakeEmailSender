@@ -8,11 +8,13 @@ import org.apache.logging.log4j.Logger;
 
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+
 @RestController
 @RequestMapping("/api/v1")
 public class EmailController {
 
-    //private static final Logger logger = LogManager.getLogger(UserController.class);
+    private static final Logger logger = LogManager.getLogger(UserController.class);
 
     private final EmailModel emailModel = new EmailModel(
             "michal.nowakowski85@gmail.com",
@@ -27,20 +29,20 @@ public class EmailController {
 
     @RequestMapping("/hello")
     public String hello() {
-        emailService.sendEmail(emailModel);
+        //emailService.sendEmail(emailModel);
         return "Hello!";
     }
 
     @GetMapping("/sendemail")
     public String sendEmail() {
         //emailService.sendEmail(emailModel);
-//        logger.info("sent controller");
+        logger.info("sent controller");
         return "Email sent";
     }
     @PostMapping("/sendemail2")
-    public String sendEmail2() {
-//        emailService.sendEmail(emailModel);
-//        logger.info("sent controller");
+    public String sendEmail2(@RequestBody EmailModel emailModel) {
+        emailService.sendEmail(emailModel);
+        logger.info("sent controller");
         return "Email2 sent";
     }
 

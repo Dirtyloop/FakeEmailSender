@@ -1,19 +1,23 @@
 package com.komfortcieplny.FakeEmailSender.email.service;
 
 import com.komfortcieplny.FakeEmailSender.email.model.EmailModel;
+import com.komfortcieplny.FakeEmailSender.email.utils.EmailLog;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+
+import java.io.IOException;
 
 @Service
 public class EmailService {
 
     private final JavaMailSender mailSender;
+    private final EmailLog emailLog = new EmailLog();
 
     public EmailService(JavaMailSender mailSender) {
         this.mailSender = mailSender;
     }
-    public void sendEmail(EmailModel emailModel) {
+    public void sendEmail(EmailModel emailModel){
         SimpleMailMessage mailMessage = new SimpleMailMessage();
 
         mailMessage.setFrom("FakeEmailSender");
@@ -22,6 +26,11 @@ public class EmailService {
         mailMessage.setText(emailModel.getMessage());
 
         mailSender.send(mailMessage);
+        try {
+            emailLog.logInfo("Message to " + emailModel.getRecipient() + " sent");
+        } catch (IOException e) {
+            System.out.println("Exception! Message was not logged");
+        }
 
         System.out.println("sent");
     }
