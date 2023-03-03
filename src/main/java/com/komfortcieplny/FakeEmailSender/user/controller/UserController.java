@@ -22,7 +22,7 @@ public class UserController {
     public List<User> getUsers() {
         userList.add(new User("Michal", "michal.nowakowski85@gmail.com"));
         userList.add(new User("Joanna", "zmyslonyadres@pl"));
-        logger.info("Users displayed");
+        logger.info("Users " + userList.get(0).getName() + " and " + userList.get(1).getName() + " displayed");
         return userList;
     }
 }
