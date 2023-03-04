@@ -1,5 +1,6 @@
 package com.komfortcieplny.FakeEmailSender.user.service;
 
+import com.komfortcieplny.FakeEmailSender.user.exceptions.UserNotFoundException;
 import com.komfortcieplny.FakeEmailSender.user.model.User;
 import com.komfortcieplny.FakeEmailSender.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -17,5 +18,14 @@ public class UserService {
 
     public List<User> findAllUsers() {
         return userRepository.findAll();
+    }
+
+    public User findUser(Long id) {
+        return userRepository.findById(id).orElseThrow(() ->
+                new UserNotFoundException(String.format("User with id %s was not found", id)));
+    }
+
+    public User createUser(User user) {
+        return userRepository.save(user);
     }
 }

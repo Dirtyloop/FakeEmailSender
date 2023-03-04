@@ -1,14 +1,14 @@
 package com.komfortcieplny.FakeEmailSender.user.model;
 
-//import jakarta.persistence.*;
-
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "users")
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequence")
+    @SequenceGenerator(name = "sequence", initialValue = 6)
+    @Column(nullable = false, updatable = false)
     private Long id;
     private String name;
     private String email;
