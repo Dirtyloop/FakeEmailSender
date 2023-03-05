@@ -39,14 +39,14 @@ public class UserController {
     }
 
     @PostMapping("/users")
-    public ResponseEntity<User> createUser(@RequestBody User user) {
+    public ResponseEntity<User> createUser(@RequestBody @Valid User user) {
         User newUser = userService.createUser(user);
         logger.info("User with name " + newUser.getName() + " created");
         return new ResponseEntity<>(newUser, HttpStatus.CREATED);
     }
 
     @PutMapping("/users/{id}")
-    public ResponseEntity<User> updateUser(@RequestBody User user, @PathVariable("id") Long id) {
+    public ResponseEntity<User> updateUser(@RequestBody @Valid User user, @PathVariable("id") Long id) {
         if (user.getId()==null) {
             user.setId(id);
         }
