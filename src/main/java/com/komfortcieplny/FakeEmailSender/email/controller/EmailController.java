@@ -33,6 +33,13 @@ public class EmailController {
         return "Hello!";
     }
 
+    @PostMapping("/send")
+    public String send(@RequestBody EmailModel emailModel) {
+        emailService.sendEmail(emailModel);
+        logger.info("sent controller");
+        return "Email2 sent";
+    }
+
     @GetMapping("/sendemail")
     public String sendEmail() {
         //emailService.sendEmail(emailModel);
