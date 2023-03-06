@@ -16,4 +16,9 @@ public class UserDto {
     public String getEmail() {
         return email;
     }
+
+    @Override
+    public String toString() {
+        return "{name = " + name + ", email=" + email + "}";
+    }
 }
