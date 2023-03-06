@@ -20,14 +20,14 @@ public class UserService {
 
     public List<User> getUsers() {
         List<User> userList = userRepository.findAll();
-        logger.info("All users displayed");
+        logger.info("All users retrieved from database");
         return userList;
     }
 
     public User getUser(Long id) {
         User user = userRepository.findById(id).orElseThrow(() ->
                 new UserNotFoundException(String.format("User with id %s was not found", id)));
-        logger.info(String.format("User with id %s displayed", id));
+        logger.info(String.format("User with id %s retrieved from database", id));
         return user;
     }
 
