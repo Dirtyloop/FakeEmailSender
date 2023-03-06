@@ -3,6 +3,8 @@ package com.komfortcieplny.FakeEmailSender.user.service;
 import com.komfortcieplny.FakeEmailSender.user.exceptions.UserNotFoundException;
 import com.komfortcieplny.FakeEmailSender.user.model.User;
 import com.komfortcieplny.FakeEmailSender.user.repository.UserRepository;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,30 +12,41 @@ import java.util.List;
 @Service
 public class UserService {
 
+    private static final Logger logger = LogManager.getLogger(UserService.class);
+
     private final UserRepository userRepository;
 
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
-    public List<User> findAllUsers() {
-        return userRepository.findAll();
+    public List<User> getUsers() {
+        List<User> userList = userRepository.findAll();
+        logger.info("All users displayed");
+        return userList;
     }
 
-    public User findUser(Long id) {
-        return userRepository.findById(id).orElseThrow(() ->
+    public User getUser(Long id) {
+        User user = userRepository.findById(id).orElseThrow(() ->
                 new UserNotFoundException(String.format("User with id %s was not found", id)));
+        logger.info("User with id " + id + " displayed");
+        return user;
     }
 
     public User createUser(User user) {
-        return userRepository.save(user);
+        User newUser = userRepository.save(user);
+        logger.info("User with id " + newUser.getId() + " created");
+        return newUser;
     }
 
     public User updateUser(User user) {
-        return userRepository.save(user);
+        User updatedUser = userRepository.save(user);
+        logger.info("User with id " + updatedUser.getId() + " updated");
+        return updatedUser;
     }
 
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
+        logger.info("User with id " + id + " deleted");
     }
 }

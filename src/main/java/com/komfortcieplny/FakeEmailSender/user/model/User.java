@@ -1,8 +1,6 @@
 package com.komfortcieplny.FakeEmailSender.user.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "users")
@@ -12,9 +10,7 @@ public class User {
     @SequenceGenerator(name = "sequence", initialValue = 6)
     @Column(nullable = false, updatable = false)
     private Long id;
-    @NotBlank
     private String name;
-    @Email
     private String email;
 
     public User(Long id, String name, String email) {
@@ -25,6 +21,17 @@ public class User {
 
     public User() {
     }
+
+    private User(Builder builder) {
+        setId(builder.id);
+        setName(builder.name);
+        setEmail(builder.email);
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
 
     public void setId(Long id) {
         this.id = id;
@@ -48,5 +55,33 @@ public class User {
 
     public String getEmail() {
         return email;
+    }
+
+    public static final class Builder {
+        private Long id;
+        private String name;
+        private String email;
+
+        private Builder() {
+        }
+
+        public Builder id(Long val) {
+            id = val;
+            return this;
+        }
+
+        public Builder name(String val) {
+            name = val;
+            return this;
+        }
+
+        public Builder email(String val) {
+            email = val;
+            return this;
+        }
+
+        public User build() {
+            return new User(this);
+        }
     }
 }

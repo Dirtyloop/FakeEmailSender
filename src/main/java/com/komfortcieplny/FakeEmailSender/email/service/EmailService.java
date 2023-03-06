@@ -40,7 +40,7 @@ public class EmailService {
     }
 
     private String[] prepareEmailList() {
-        List<User> userList = userService.findAllUsers();
+        List<User> userList = userService.getUsers();
         List<String> emailList = new ArrayList<>();
         for(User user : userList) {
             emailList.add(user.getEmail());

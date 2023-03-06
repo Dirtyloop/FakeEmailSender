@@ -2,21 +2,16 @@ package com.komfortcieplny.FakeEmailSender.user.controller;
 
 import com.komfortcieplny.FakeEmailSender.user.model.User;
 import com.komfortcieplny.FakeEmailSender.user.service.UserService;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 
 import java.util.List;
-import java.util.Objects;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/users")
 public class UserController {
 
-    private static final Logger logger = LogManager.getLogger(UserController.class);
+
 
     private final UserService userService;
 
@@ -24,46 +19,36 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/users")
+    @GetMapping("/")
     public List<User> getUsers() {
-        List<User> userList = userService.findAllUsers();
-        logger.info("All users displayed");
-        return userList;
+        return userService.getUsers();
     }
 
-    @GetMapping("/users/{id}")
+    @GetMapping("/{id}")
     public User getUserById(@PathVariable("id") Long id) {
-        User user = userService.findUser(id);
-        logger.info("User with id " + id + " displayed");
-        return user;
+        return userService.getUser(id);
     }
 
-    @PostMapping("/users")
-    public ResponseEntity<User> createUser(@RequestBody @Valid User user) {
-        User newUser = userService.createUser(user);
-        logger.info("User with name " + newUser.getName() + " created");
-        return new ResponseEntity<>(newUser, HttpStatus.CREATED);
+    @PostMapping("/")
+    public User createUser(@RequestBody @Valid UserDto userDto) {
+        return userService.createUser(mapUser(userDto, null));
     }
 
-    @PutMapping("/users/{id}")
-    public ResponseEntity<User> updateUser(@RequestBody @Valid User user, @PathVariable("id") Long id) {
-        if (user.getId()==null) {
-            user.setId(id);
-        }
-        if (Objects.equals(user.getId(), id)) {
-            User updatedUser = userService.updateUser(user);
-            logger.info("User with id " + updatedUser.getId() + " updated");
-            return new ResponseEntity<>(updatedUser, HttpStatus.OK);
-        }
-        logger.info("User with id " + id + " can not be updated with id " + user.getId());
-        return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+    @PutMapping("/{id}")
+    public User updateUser(@RequestBody @Valid UserDto userDto, @PathVariable("id") Long id) {
+        return userService.updateUser(mapUser(userDto, id));
     }
 
-    @DeleteMapping("/users/{id}")
-    public ResponseEntity<?> deleteUser(@PathVariable("id") Long id) {
+    @DeleteMapping("/{id}")
+    public void deleteUser(@PathVariable("id") Long id) {
         userService.deleteUser(id);
-        logger.info("User with id " + id + " deleted");
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    private static User mapUser(UserDto userDto, Long id) {
+        return User.builder()
+                .id(id)
+                .name(userDto.getName())
+                .email(userDto.getEmail())
+                .build();
+    }
 }
