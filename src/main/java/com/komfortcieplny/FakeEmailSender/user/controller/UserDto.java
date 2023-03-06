@@ -19,6 +19,6 @@ public class UserDto {
 
     @Override
     public String toString() {
-        return "{name = " + name + ", email=" + email + "}";
+        return "{name: " + name + ", email: " + email + "}";
     }
 }
