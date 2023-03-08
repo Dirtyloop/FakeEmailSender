@@ -10,9 +10,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -43,7 +45,14 @@ class UserServiceTest {
 
 
     @Test
-    void getUser() {
+    @DisplayName("Should Return One User")
+    void getUserTest() {
+        User userToDB = User.builder().name("Bogus").email("bogus@example.com").build();
+        when(userRepository.findById(anyLong())).thenReturn(Optional.of(userToDB));
+
+        User userFromDB = userService.getUser(6l);
+
+        assertThat(userFromDB).isEqualTo(userToDB);
     }
 
     @Test
