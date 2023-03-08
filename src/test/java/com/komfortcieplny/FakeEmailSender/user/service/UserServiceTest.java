@@ -10,6 +10,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -35,7 +38,7 @@ class UserServiceTest {
     void shouldReturnListWith3UsersTest() {
         when(userRepository.findAll()).thenReturn(List.of(new User(), new User(), new User()));
 
-        Assertions.assertThat(userService.getUsers()).hasSize(3);
+        assertThat(userService.getUsers()).hasSize(3);
     }
 
 
@@ -44,7 +47,14 @@ class UserServiceTest {
     }
 
     @Test
-    void createUser() {
+    @DisplayName("Should Create A New User")
+    void createUserTest() {
+        User userToDB = User.builder().name("Michal").email("michal@example.com").build();
+        when(userRepository.save(any(User.class))).thenReturn(userToDB);
+
+        User userFromDB = userService.createUser(new User());
+
+        assertThat(userFromDB).isEqualTo(userToDB);
     }
 
     @Test
