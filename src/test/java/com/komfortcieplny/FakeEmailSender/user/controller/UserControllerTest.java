@@ -83,6 +83,18 @@ class UserControllerTest {
     }
 
     @Test
+    @DisplayName("Should Not Create New User When Email Is Invalid")
+    void shouldNotCreateUserWhenEmailIsInvalidTest() throws Exception {
+        this.mockMvc.perform(post("/api/v1/users")
+                        .contentType(APPLICATION_JSON)
+                        .content("{\"name\":\"Bogus\",\"email\":\"bogus\"}"))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+
+        Assertions.assertThat(this.userRepository.findAll()).hasSize(5);
+    }
+
+    @Test
     @DisplayName("Should Update User With Id 3")
     void updateUserTest() throws Exception {
         this.mockMvc.perform(put("/api/v1/users/{id}", 3)
