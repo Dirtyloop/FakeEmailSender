@@ -12,8 +12,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.hamcrest.Matchers.aMapWithSize;
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -63,6 +62,7 @@ class UserControllerTest {
                 .content("{\"name\":\"Apolonia\",\"email\":\"apolonia@example.com\"}"))
                 .andDo(print())
                 .andExpect(status().isCreated())
+                .andExpect(content().contentType(APPLICATION_JSON))
                 .andExpect(jsonPath("$").isMap())
                 .andExpect(jsonPath("$", aMapWithSize(3)))
                 .andExpect(jsonPath("$.id").value(6));
@@ -72,7 +72,19 @@ class UserControllerTest {
     }
 
     @Test
-    void updateUser() {
+    @DisplayName("Should Update User With Id 3")
+    void updateUserTest() throws Exception {
+        this.mockMvc.perform(put("/api/v1/users/{id}", 3)
+                .contentType(APPLICATION_JSON)
+                .content("{\"name\":\"Janina\",\"email\":\"janina@example.com\"}"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(APPLICATION_JSON))
+                .andExpect(jsonPath("$.id").value(3))
+                .andExpect(jsonPath("$.name").value("Janina"))
+                .andExpect(jsonPath("$.email").value("janina@example.com"));
+
+        Assertions.assertThat(this.userRepository.findAll()).hasSize(5);
     }
 
     @Test
