@@ -81,6 +81,11 @@ class UserServiceTest {
     }
 
     @Test
-    void deleteUser() {
+    @DisplayName("Should delete user")
+    void deleteUserTest() {
+        doNothing().when(userRepository).deleteById(anyLong());
+
+        userService.deleteUser(3l);
+        verify(userRepository, times(1)).deleteById(anyLong());
     }
 }
