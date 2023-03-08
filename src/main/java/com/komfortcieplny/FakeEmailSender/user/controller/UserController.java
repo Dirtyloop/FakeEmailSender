@@ -24,7 +24,7 @@ public class UserController {
         this.requestLogger = requestLogger;
     }
 
-    @GetMapping("/")
+    @GetMapping()
     public List<User> getUsers() {
         try {
             requestLogger.logInfo("getUsers requested");
@@ -44,7 +44,7 @@ public class UserController {
         return userService.getUser(id);
     }
 
-    @PostMapping("/")
+    @PostMapping()
     public User createUser(@RequestBody @Valid UserDto userDto) {
         try {
             requestLogger.logInfo(
