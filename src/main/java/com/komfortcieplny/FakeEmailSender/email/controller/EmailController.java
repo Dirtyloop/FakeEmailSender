@@ -2,7 +2,10 @@ package com.komfortcieplny.FakeEmailSender.email.controller;
 
 import com.komfortcieplny.FakeEmailSender.email.model.EmailModel;
 import com.komfortcieplny.FakeEmailSender.email.service.EmailService;
+import com.komfortcieplny.FakeEmailSender.user.service.UserService;
 import com.komfortcieplny.FakeEmailSender.utils.RequestLogger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 
@@ -10,6 +13,7 @@ import java.io.IOException;
 @RequestMapping("/api/v1/email")
 public class EmailController {
 
+    private static final Logger logger = LogManager.getLogger(UserService.class);
     private final EmailService emailService;
     private final RequestLogger requestLogger;
 
@@ -18,7 +22,7 @@ public class EmailController {
         this.requestLogger = requestLogger;
     }
 
-    @PostMapping("/")
+    @PostMapping()
     public String sendEmail(@RequestBody EmailModel emailModel) {
         try {
             requestLogger.logInfo(
@@ -28,7 +32,7 @@ public class EmailController {
                     )
             );
         } catch (IOException e) {
-            System.out.println("Exception! sendEmail request was not logged");
+            logger.error("Exception! sendEmail request was not logged");
         }
         emailService.sendEmail(emailModel);
         return "Email sent to all users";
@@ -45,7 +49,7 @@ public class EmailController {
                     )
             );
         } catch (IOException e) {
-            System.out.println("Exception! sendEmail request was not logged");
+            logger.error("Exception! sendEmail request was not logged");
         }
         emailService.sendEmailToId(emailModel, id);
         return String.format("Email sent to user with id %d", id);
