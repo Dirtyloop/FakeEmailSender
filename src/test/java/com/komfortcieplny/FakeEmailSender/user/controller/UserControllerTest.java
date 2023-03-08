@@ -68,7 +68,18 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.id").value(6));
 
         Assertions.assertThat(this.userRepository.findAll()).hasSize(6);
+    }
 
+    @Test
+    @DisplayName("Should Not Create New User When Name Is Blank")
+    void shouldNotCreateUserWhenNameIsBlankTest() throws Exception {
+        this.mockMvc.perform(post("/api/v1/users")
+                        .contentType(APPLICATION_JSON)
+                        .content("{\"name\":\"   \",\"email\":\"user@example.com\"}"))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+
+        Assertions.assertThat(this.userRepository.findAll()).hasSize(5);
     }
 
     @Test
