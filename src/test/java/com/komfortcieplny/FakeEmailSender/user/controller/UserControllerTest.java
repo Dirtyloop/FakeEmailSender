@@ -1,15 +1,19 @@
 package com.komfortcieplny.FakeEmailSender.user.controller;
 
 import com.komfortcieplny.FakeEmailSender.user.repository.UserRepository;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
+
+import static org.hamcrest.Matchers.aMapWithSize;
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -52,7 +56,19 @@ class UserControllerTest {
     }
 
     @Test
-    void createUser() {
+    @DisplayName("Should Create New User With Id 6")
+    void createUserTest() throws Exception {
+        this.mockMvc.perform(post("/api/v1/users")
+                .contentType(APPLICATION_JSON)
+                .content("{\"name\":\"Apolonia\",\"email\":\"apolonia@example.com\"}"))
+                .andDo(print())
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$").isMap())
+                .andExpect(jsonPath("$", aMapWithSize(3)))
+                .andExpect(jsonPath("$.id").value(6));
+
+        Assertions.assertThat(this.userRepository.findAll()).hasSize(6);
+
     }
 
     @Test
