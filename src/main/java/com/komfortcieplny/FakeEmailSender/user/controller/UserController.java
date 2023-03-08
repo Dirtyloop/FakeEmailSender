@@ -3,16 +3,18 @@ package com.komfortcieplny.FakeEmailSender.user.controller;
 import com.komfortcieplny.FakeEmailSender.user.model.User;
 import com.komfortcieplny.FakeEmailSender.user.service.UserService;
 import com.komfortcieplny.FakeEmailSender.utils.RequestLogger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
-
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/users")
 public class UserController {
+
+    private static final Logger logger = LogManager.getLogger(UserService.class);
 
     private final UserService userService;
     private final RequestLogger requestLogger;
@@ -27,7 +29,7 @@ public class UserController {
         try {
             requestLogger.logInfo("getUsers requested");
         } catch (IOException e) {
-            System.out.println("Exception! getUsers request was not logged");
+            logger.error("Exception! getUsers request was not logged");
         }
         return userService.getUsers();
     }
@@ -37,7 +39,7 @@ public class UserController {
         try {
             requestLogger.logInfo(String.format("getUser with id %d requested", id));
         } catch (IOException e) {
-            System.out.printf("Exception! getUser with id %d request was not logged%n", id);
+            logger.error(String.format("Exception! getUser with id %d request was not logged%n", id));
         }
         return userService.getUser(id);
     }
@@ -52,7 +54,7 @@ public class UserController {
                     )
             );
         } catch (IOException e) {
-            System.out.println("Exception! createUser request was not logged");
+            logger.error("Exception! createUser request was not logged");
         }
         return userService.createUser(mapUser(userDto, null));
     }
@@ -68,7 +70,7 @@ public class UserController {
                     )
             );
         } catch (IOException e) {
-            System.out.println("Exception! createUser request was not logged");
+            logger.error("Exception! updateUser request was not logged");
         }
         return userService.updateUser(mapUser(userDto, id));
     }
@@ -78,7 +80,7 @@ public class UserController {
         try {
             requestLogger.logInfo(String.format("deleteUser with id %d requested", id));
         } catch (IOException e) {
-            System.out.printf("Exception! deleteUser with id %d request was not logged%n", id);
+            logger.error(String.format("Exception! deleteUser with id %d request was not logged%n", id));
         }
         userService.deleteUser(id);
     }
