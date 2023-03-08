@@ -5,6 +5,7 @@ import com.komfortcieplny.FakeEmailSender.user.service.UserService;
 import com.komfortcieplny.FakeEmailSender.utils.RequestLogger;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 import java.io.IOException;
@@ -25,6 +26,7 @@ public class UserController {
     }
 
     @GetMapping()
+    @ResponseStatus(HttpStatus.OK)
     public List<User> getUsers() {
         try {
             requestLogger.logInfo("getUsers requested");
@@ -35,6 +37,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
     public User getUser(@PathVariable("id") Long id) {
         try {
             requestLogger.logInfo(String.format("getUser with id %d requested", id));
@@ -45,6 +48,7 @@ public class UserController {
     }
 
     @PostMapping()
+    @ResponseStatus(HttpStatus.CREATED)
     public User createUser(@RequestBody @Valid UserDto userDto) {
         try {
             requestLogger.logInfo(
@@ -76,6 +80,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUser(@PathVariable("id") Long id) {
         try {
             requestLogger.logInfo(String.format("deleteUser with id %d requested", id));
