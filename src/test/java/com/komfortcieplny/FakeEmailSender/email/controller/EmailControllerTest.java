@@ -30,4 +30,14 @@ class EmailControllerTest {
                 .andExpect(content().string("Email sent to all users"));
     }
 
+    @Test
+    @DisplayName("Should Send Email To User With Id 1")
+    void SendEmailToIdTest() throws Exception {
+        this.mockMvc.perform(post("/api/v1/email/{id}", 1)
+                        .contentType(APPLICATION_JSON)
+                        .content("{\"subject\":\"Subject\",\"message\":\"Message\"}"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string("Email sent to user with id 1"));
+    }
 }
