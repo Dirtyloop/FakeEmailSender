@@ -1,8 +1,8 @@
 package com.komfortcieplny.FakeEmailSender.user.service;
 
+import com.komfortcieplny.FakeEmailSender.user.exceptions.UserNotFoundException;
 import com.komfortcieplny.FakeEmailSender.user.model.User;
 import com.komfortcieplny.FakeEmailSender.user.repository.UserRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,8 +11,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 import java.util.Optional;
-
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.verify;
@@ -53,6 +53,14 @@ class UserServiceTest {
         User userFromDB = userService.getUser(6l);
 
         assertThat(userFromDB).isEqualTo(userToDB);
+    }
+
+    @Test
+    @DisplayName("Should Throw Exception When User Not Found")
+    void shouldThrowExceptionWhenUserNotFoundTest() {
+        when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+        assertThrows(UserNotFoundException.class, () -> userService.getUser(1l));
     }
 
     @Test
