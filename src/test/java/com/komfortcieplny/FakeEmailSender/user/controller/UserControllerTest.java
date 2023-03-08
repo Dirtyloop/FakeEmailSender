@@ -88,6 +88,12 @@ class UserControllerTest {
     }
 
     @Test
-    void deleteUser() {
+    @DisplayName("Should Delete User With Id 4")
+    void deleteUserTest() throws Exception {
+        this.mockMvc.perform(delete("/api/v1/users/{id}", 4))
+                .andDo(print())
+                .andExpect(status().isNoContent());
+
+        Assertions.assertThat(this.userRepository.findAll()).hasSize(4);
     }
 }
