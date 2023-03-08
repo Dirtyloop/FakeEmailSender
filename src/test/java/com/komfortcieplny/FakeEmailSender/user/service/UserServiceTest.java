@@ -77,7 +77,15 @@ class UserServiceTest {
     }
 
     @Test
-    void updateUser() {
+    @DisplayName("Should Update An Existing User")
+    void updateUserTest() {
+        User userToDB = User.builder().name("Michal").email("michal@example.com").build();
+        when(userRepository.save(any(User.class))).thenReturn(userToDB);
+
+        User userFromDB = userService.updateUser(new User());
+
+        assertThat(userFromDB).isEqualTo(userToDB);
+        verify(userRepository, times(1)).save(any(User.class));
     }
 
     @Test
