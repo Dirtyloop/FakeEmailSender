@@ -40,7 +40,15 @@ class UserControllerTest {
     }
 
     @Test
-    void getUser() {
+    @DisplayName("Should Return User With Id 5")
+    void getUserWithId5Test() throws Exception {
+        this.mockMvc.perform(get("/api/v1/users/{id}", 5))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(APPLICATION_JSON))
+                .andExpect(jsonPath("$.id").value(5))
+                .andExpect(jsonPath("$.name").value("Joanna"))
+                .andExpect(jsonPath("$.email").value("joanna@example.com"));
     }
 
     @Test
