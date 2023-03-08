@@ -60,4 +60,26 @@ class EmailServiceTest {
 
         verify(mailSender, times(1)).send(mailMessage);
     }
+
+    @Test
+    @DisplayName("Should Send Email To User With Id 2")
+    void shouldSendEmailToUserWithId2Test() {
+        EmailModel emailModel = new EmailModel("Subject", "Message");
+        String [] emails = {"ewa@test.com"};
+        User user1 = new User(1l, "Adam", "adam@test.com");
+        User user2 = new User(2l, "Ewa", "ewa@test.com");
+        User user3 = new User(3l, "Ola", "ola@test.com");
+        List<User> users = List.of(user1, user2, user3);
+        Long id = 2l;
+
+        when(userService.getUser(id)).thenReturn(users.get(Math.toIntExact(id-1)));
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setFrom("FakeEmailSender <javafakeapp@gmail.com>");
+        mailMessage.setTo(emails);
+        mailMessage.setSubject(emailModel.subject());
+        mailMessage.setText(emailModel.message());
+        emailService.sendEmailToId(emailModel, id);
+
+        verify(mailSender, times(1)).send(mailMessage);
+    }
 }
