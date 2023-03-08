@@ -83,5 +83,23 @@ public class User {
         public User build() {
             return new User(this);
         }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            Builder builder = (Builder) o;
+
+            if (!name.equals(builder.name)) return false;
+            return email.equals(builder.email);
+        }
+
+        @Override
+        public int hashCode() {
+            int result = name.hashCode();
+            result = 31 * result + email.hashCode();
+            return result;
+        }
     }
 }
