@@ -15,8 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
@@ -32,7 +31,7 @@ class UserServiceTest {
     void getUsersSimpleTest() {
         userService.getUsers();
 
-        verify(userRepository).findAll();
+        verify(userRepository, times(1)).findAll();
     }
 
     @Test
@@ -41,8 +40,8 @@ class UserServiceTest {
         when(userRepository.findAll()).thenReturn(List.of(new User(), new User(), new User()));
 
         assertThat(userService.getUsers()).hasSize(3);
+        verify(userRepository, times(1)).findAll();
     }
-
 
     @Test
     @DisplayName("Should Return One User")
@@ -53,6 +52,7 @@ class UserServiceTest {
         User userFromDB = userService.getUser(6l);
 
         assertThat(userFromDB).isEqualTo(userToDB);
+        verify(userRepository, times(1)).findById(anyLong());
     }
 
     @Test
@@ -61,6 +61,7 @@ class UserServiceTest {
         when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
 
         assertThrows(UserNotFoundException.class, () -> userService.getUser(1l));
+        verify(userRepository, times(1)).findById(anyLong());
     }
 
     @Test
@@ -72,6 +73,7 @@ class UserServiceTest {
         User userFromDB = userService.createUser(new User());
 
         assertThat(userFromDB).isEqualTo(userToDB);
+        verify(userRepository, times(1)).save(any(User.class));
     }
 
     @Test
