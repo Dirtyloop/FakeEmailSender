@@ -45,5 +45,10 @@ There is a validation mechanism on User.name and User.email fields.
 Application accept only NotBlank names and proper email addresses.
 
 ### Loggers
-There are two logging mechanism implemented in the application. One (log4j2) to log general application events: `./logs/fakeemailsender.log`
-The second one is a simple self-made request logger to log all requests from REST API.
+There are two independent logging mechanisms implemented in the application.
+
+One (log4j2) to log general application events: `./logs/fakeemailsender.log`
+
+The second one is a simple self-made request logger to log all requests from REST API: `./logs/requests.log`
+
+Log files will be created automatically with first entry.
