@@ -3,8 +3,6 @@ package com.komfortcieplny.FakeEmailSender.utils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.internal.matchers.Contains;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
