@@ -2,6 +2,8 @@ package com.komfortcieplny.FakeEmailSender.user.model;
 
 import jakarta.persistence.*;
 
+import java.util.Objects;
+
 @Entity
 @Table(name = "users")
 public class User {
@@ -83,23 +85,25 @@ public class User {
         public User build() {
             return new User(this);
         }
+    }
 
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
-            Builder builder = (Builder) o;
+        User user = (User) o;
 
-            if (!name.equals(builder.name)) return false;
-            return email.equals(builder.email);
-        }
+        if (!Objects.equals(id, user.id)) return false;
+        if (!Objects.equals(name, user.name)) return false;
+        return Objects.equals(email, user.email);
+    }
 
-        @Override
-        public int hashCode() {
-            int result = name.hashCode();
-            result = 31 * result + email.hashCode();
-            return result;
-        }
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (email != null ? email.hashCode() : 0);
+        return result;
     }
 }
