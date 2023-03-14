@@ -4,5 +4,5 @@ services:
     container_name: FakeEmailSender
     build: .
     restart: always
-    ports:
-      - '8080:8080'
+#    ports:
+#      - '8081:8080'
